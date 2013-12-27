@@ -6,10 +6,9 @@ class UIScreen < StageScreen
     @skin_path = skin_path
     super
   end
-  
+
   def show
     super
 
-    @skin = 
   end
 end

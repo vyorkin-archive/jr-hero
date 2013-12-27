@@ -9,7 +9,6 @@ class JrHeroGame < Game
               :sound, :music, :assets, :batch, :font
 
   def initialize
-    @next_screen = nil
     @running = true
   end
 
@@ -17,11 +16,11 @@ class JrHeroGame < Game
     @clock = Time.now.utc
 
     @preferences = PreferencesManager.new
-    @locales = LocaleManager.new
-    @sound = SoundManager.new
-    @music = MusicManager.new
-    @entities = EntityManager.new
     @assets = AssetManager.new
+    @locales = LocaleManager.new
+    @sound = SoundManager.new(@preferences, @assets)
+    @music = MusicManager.new(@preferences, @assets)
+    @entities = EntityManager.new
     @batch = SpriteBatch.new
     @font = BitmapFont.new
   end
