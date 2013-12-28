@@ -22,7 +22,6 @@ class JrHeroGame < Game
     @music = MusicManager.new(@preferences, @assets)
     @entities = EntityManager.new
     @batch = SpriteBatch.new
-    @font = BitmapFont.new
   end
 
   def running?

@@ -5,6 +5,7 @@ java_import com.badlogic.gdx.graphics.Camera
 class GameScreen
   include Screen
   include InputAdapter
+  include FontHelper
 
   attr_reader :done
 

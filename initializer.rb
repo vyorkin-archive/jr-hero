@@ -38,7 +38,7 @@ java_import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 dir = File.expand_path(File.join(File.dirname(__FILE__), 'src'))
 $LOAD_PATH << dir
 
-%w{ common entities screens }.each do |dir|
+%w{ camera common components entities management screens systems }.each do |dir|
   path = File.expand_path(File.join(File.dirname(__FILE__), 'src', dir))
   $LOAD_PATH << path
 end
