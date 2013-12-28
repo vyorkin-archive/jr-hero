@@ -18,24 +18,12 @@ class PreferencesManager
   end
 
   def method_missing(name, *args, &block)
-    source_name = name.to_s
-    key = source_name.gsub(/[!?=]/, '')
-
-    if source_name.end_with? '='
-      arg = args.last
-
-      ruby_type = arg.is_a?(Class) ? arg : arg.class
-      java_type = source_name.end_with?('?') ? 'Boolean' : TYPE_MAPPINGS[ruby_type]
-      @map[key] = java_type
-
-      target_name = "put#{java_type}".to_sym
-    else
-      java_type = @map[key]
-      target_name = "get#{java_type}".to_sym
-    end
+    source = name.to_s
+    key = source.gsub(/[!?=]/, '')
+    target = target(source, key, args)
 
     define_singleton_method(name) do |*args|
-      @storage.send(target_name, *[key, *args])
+      @storage.send(target, *[key, *args])
     end
 
     self.send(name, *args)
@@ -59,5 +47,18 @@ class PreferencesManager
 
   def save!
     @storage.flush
+  end
+
+  private
+
+  def target(name, key, args)
+    return "get#{@map[key]}".to_sym unless name.end_with? '='
+
+    arg = args.last
+
+    ruby_type = arg.is_a?(Class) ? arg : arg.class
+    @map[key] = name.end_with?('?') ? 'Boolean' : TYPE_MAPPINGS[ruby_type]
+
+    "put#{@map[key]}".to_sym
   end
 end
