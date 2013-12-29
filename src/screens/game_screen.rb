@@ -1,12 +1,9 @@
-java_import com.badlogic.gdx.InputAdapter
-java_import com.badlogic.gdx.Screen
-java_import com.badlogic.gdx.graphics.Camera
-
 class GameScreen < InputAdapter
   include Screen
 
   def initialize(game)
     @game = game
+    super()
   end
 
   def render(delta)
@@ -14,8 +11,14 @@ class GameScreen < InputAdapter
     draw(delta)
   end
 
-  def update
-  end
+  def show;   end
+  def hide;   end
+  def pause;  end
+  def resume; end
+  def load;   end
+  def unload; end
+
+  def resize(width, height); end
 
   def done?
     @done
@@ -25,17 +28,14 @@ class GameScreen < InputAdapter
     @done = true
   end
 
-  def load;   end
-  def unload; end
-
   def dispose
     unload
   end
 
   protected
 
-  def update; end
-  def draw; end
+  def update(delta); end
+  def draw(delta); end
 
   def log(message, *args)
     @game.log(message, *args)

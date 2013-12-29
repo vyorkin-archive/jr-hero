@@ -2,7 +2,9 @@ java_import com.badlogic.gdx.Screen
 
 require 'level_screen'
 
-class MenuScreen < Screen
+class MenuScreen
+  include Screen
+
   def initialize(game)
     @game = game
   end

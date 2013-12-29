@@ -1,6 +1,6 @@
 module Settings
-  WIDTH             = 1280
-  HEIGHT            = 800
+  WIDTH             = 800
+  HEIGHT            = 600
   TITLE             = 'JR Hero'
   VERSION           = '0.0.1 pre-alpha'
   LOG               = 'jr-hero'

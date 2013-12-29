@@ -1,15 +1,11 @@
-java_import com.badlogic.gdx.Gdx
-java_import com.badlogic.gdx.graphics.OrthographicCamera
-java_import com.badlogic.gdx.math.Rectangle
-java_import com.badlogic.gdx.math.Vector2
-java_import com.badlogic.gdx.math.Vector3
-java_import com.badlogic.gdx.utils.Scaling
-
 class GameCamera < OrthographicCamera
   attr_reader :width, :height, :aspect_ratio, :viewport
 
-  def initialize(width, height)
-    @width, @height = width, height
+  def initialize
+    super()
+
+    @width = Settings::WIDTH
+    @height = Settings::HEIGHT
     @aspect_ratio = width.to_f / height
     @viewport = Rectangle.new
 

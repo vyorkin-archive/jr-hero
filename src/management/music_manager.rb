@@ -25,6 +25,10 @@ class MusicManager < AudioManager
     @current = nil
   end
 
+  def dispose
+    stop
+  end
+
   private
 
   def playing?

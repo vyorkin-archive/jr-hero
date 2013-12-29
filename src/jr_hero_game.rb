@@ -11,15 +11,16 @@ class JrHeroGame < Game
   def create
     @clock = Time.now.utc
 
-    @preferences = PreferencesManager.new
+    @preferences = PreferencesManager.new(Settings::PREFERENCES)
     @assets      = AssetManager.new
     @locales     = LocaleManager.new
     @sound       = SoundManager.new(@preferences, @assets)
     @music       = MusicManager.new(@preferences, @assets)
     @entities    = EntityManager.new
     @batch       = SpriteBatch.new
+    @font        = BitmapFont.new
 
-    @assets.setLoader(TiledMap.class, TmxMapLoader.new(InternalFileHandleResolver.new))
+    #@assets.setLoader(TiledMap, TmxMapLoader.new(InternalFileHandleResolver.new))
     Texture.setAssetManager(@assets)
 
     Gdx.input.setCatchBackKey(true)
@@ -31,11 +32,12 @@ class JrHeroGame < Game
   end
 
   def preload
-    @assets.load R::Sound::ENTER_CLICK, Sound.class
-    @assets.load R::Sound::ENTER_HIT,   Sound.class
-    @assets.load R::Sound::EXIT,        Sound.class
-    @assets.load R::Skin::UI,           Skin.class
-    @assets.load R::Font::Consolas,     BitmapFont.class
+    #@assets.load R::Sound::Menu::ENTER_CLICK, Sound
+    #@assets.load R::Sound::Menu::ENTER_HIT,   Sound
+    #@assets.load R::Sound::Menu::EXIT,        Sound
+
+    #@assets.load R::Skin::UI,                 Skin
+    #@assets.load R::Font::Consolas,           BitmapFont
   end
 
   def render

@@ -1,9 +1,7 @@
 class LevelScreen < GameScreen
   def initialize(game)
-    super
-    @camera = GameCamera.new(
-      Settings::WIDTH, Settings::HEIGHT
-    )
+    @camera = GameCamera.new
+    super(game)
   end
 
   def getCamera
@@ -11,8 +9,8 @@ class LevelScreen < GameScreen
   end
 
   def show
-    Gdx.input.setInputProcessor(this)
-    @game.music.stop
-    @game.music.play
+    Gdx.input.setInputProcessor(self)
+    #@game.music.stop
+    #@game.music.play
   end
 end
