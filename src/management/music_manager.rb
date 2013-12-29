@@ -1,4 +1,3 @@
-java_import com.badlogic.gdx.audio.Music
 
 class MusicManager < AudioManager
   def initialize(preferences, assets)

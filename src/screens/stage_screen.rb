@@ -3,7 +3,8 @@ java_import com.badlogic.gdx.graphics.Camera
 java_import com.badlogic.gdx.scenes.scene2d.Stage
 
 class StageScreen < GameScreen
-  def initialize
+  def initialize(game)
+    super
     @stage = Stage.new(Settings::WIDTH, Settings::HEIGHT, true)
   end
 
@@ -15,6 +16,11 @@ class StageScreen < GameScreen
     super
     @stage.setViewport(Settings::WIDTH, Settings::HEIGHT, true)
     Gdx.input.setInputProcessor(@stage)
+  end
+
+  def dispose
+    @stage.dispose
+    super
   end
 
   protected

@@ -6,8 +6,7 @@ java_import com.badlogic.gdx.math.Vector3
 java_import com.badlogic.gdx.utils.Scaling
 
 class GameCamera < OrthographicCamera
-  attr_reader :width, :height, :aspect_ratio,
-              :viewport
+  attr_reader :width, :height, :aspect_ratio, :viewport
 
   def initialize(width, height)
     @width, @height = width, height

@@ -16,4 +16,5 @@ module Settings
   FULLSCREEN        = false
   RESIZABLE         = true
   FORCE_EXIT        = true
+  SKIN_PATH         = ''
 end

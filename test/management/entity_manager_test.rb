@@ -1,5 +1,4 @@
 require 'minitest/unit'
-require 'active_support/core_ext/object'
 require 'management/entity_manager'
 require 'components/component'
 

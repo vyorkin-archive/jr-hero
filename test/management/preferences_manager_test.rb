@@ -1,8 +1,5 @@
 require 'minitest/unit'
-require 'active_support/core_ext/object'
 require 'management/preferences_manager'
-
-java_import com.badlogic.gdx.backends.lwjgl.LwjglPreferences
 
 class PreferencesManagerTest < MiniTest::Unit::TestCase
   class ::PreferencesManager
@@ -15,14 +12,10 @@ class PreferencesManagerTest < MiniTest::Unit::TestCase
   PREFS_DIR = "~/.prefs"
   TEST_DIR  = "test"
   FILE_NAME = "battlefrog"
-  FILE_PATH = "#{PREFS_DIR}/#{TEST_DIR}/#{FILE_NAME}"
+  FILE_PATH = File.expand_path("#{PREFS_DIR}/#{TEST_DIR}/#{FILE_NAME}")
 
   def setup
     @manager = PreferencesManager.new("#{TEST_DIR}/#{FILE_NAME}")
-  end
-
-  def cleanup
-    File.delete FILE_PATH if File.exists? FILE_PATH
   end
 
   def test_dynamic_proxy
@@ -37,7 +30,11 @@ class PreferencesManagerTest < MiniTest::Unit::TestCase
     @manager.fire_rate = 42.0
     @manager.save!
 
-    assert File.exists?(File.expand_path(FILE_PATH))
+    expected = File.exists? FILE_PATH
+
+    assert expected
+
+    File.delete FILE_PATH if expected
   end
 end
 

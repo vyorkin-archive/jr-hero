@@ -1,11 +1,6 @@
-require 'java'
-
-require 'lib/java/libgdx-nightly-20131204/gdx-backend-lwjgl-natives.jar'
-require 'lib/java/libgdx-nightly-20131204/gdx-backend-lwjgl.jar'
-require 'lib/java/libgdx-nightly-20131204/gdx-natives.jar'
-require 'lib/java/libgdx-nightly-20131204/gdx.jar'
-
+require 'initializer'
 require 'minitest/autorun'
+require 'minitest/pride'
 
 if __FILE__ == $0
   $LOAD_PATH.unshift('src', 'test')
