@@ -1,27 +1,30 @@
-
 class MusicManager < AudioManager
-  def initialize(preferences, assets)
+  def initialize(game)
     @current = nil
-    super
+    super(game)
   end
 
   def play(file_name, loop = true)
-    return if muted? || @current = file_name
+    return if muted? || @current == file_name
 
     stop
 
-    resource = @assets.get(file_name, Music.class)
+    resource = @game.assets.get(file_name, Music.java_class)
     resource.setVolume(volume)
     resource.setLooping(loop)
     resource.play
 
     @current = file_name
+
+    @game.log "playing music %s" % file_name
   end
 
   def stop
     return unless playing?
 
-    @assets.get(@current, Music.class).stop
+    @game.assets.get(@current, Music.java_class).stop
+    @game.log "stopping current music"
+
     @current = nil
   end
 
@@ -32,7 +35,7 @@ class MusicManager < AudioManager
   private
 
   def playing?
-    @current && @assets.isLoaded(@current, Music.class)
+    @current && @game.assets.isLoaded(@current, Music.java_class)
   end
 end
 

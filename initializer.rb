@@ -59,11 +59,6 @@ $LOAD_PATH << SRC_DIR
   Dir.glob(File.expand_path("*.rb", path)) { |file| require file }
 end
 
-begin
-  require 'pry'
-rescue LoadError
-end
-
 require 'active_support/core_ext/object'
 require 'active_support/inflector'
 

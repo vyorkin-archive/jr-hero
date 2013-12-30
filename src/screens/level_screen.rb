@@ -10,7 +10,14 @@ class LevelScreen < GameScreen
 
   def show
     Gdx.input.setInputProcessor(self)
-    #@game.music.stop
-    #@game.music.play
+    @game.music.stop
+    @game.music.play(R::Music::LEVEL)
+    super()
+  end
+
+  def draw(delta)
+  end
+
+  def update(delta)
   end
 end

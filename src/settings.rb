@@ -17,4 +17,6 @@ module Settings
   RESIZABLE         = true
   FORCE_EXIT        = true
   SKIN_PATH         = ''
+  MUSIC_VOLUME      = 0.5
+  SOUND_VOLUME      = 0.5
 end

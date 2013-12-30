@@ -1,6 +1,3 @@
-java_import com.badlogic.gdx.Gdx
-java_import com.badlogic.gdx.Preferences
-
 class PreferencesManager
   TYPE_MAPPINGS = {
     TrueClass   => 'Boolean',

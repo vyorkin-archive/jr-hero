@@ -1,26 +1,27 @@
 class JrHeroGame < Game
-  GAME_CLOCK_MULTIPLIER = 1
-
-  attr_reader :clock, :preferences, :locales,
-              :sound, :music, :assets, :batch, :font
+  attr_reader :preferences, :locales, :sound,
+              :music, :assets, :batch, :font
 
   def initialize
     @running = true
   end
 
   def create
-    @clock = Time.now.utc
-
-    @preferences = PreferencesManager.new(Settings::PREFERENCES)
     @assets      = AssetManager.new
     @locales     = LocaleManager.new
-    @sound       = SoundManager.new(@preferences, @assets)
-    @music       = MusicManager.new(@preferences, @assets)
     @entities    = EntityManager.new
     @batch       = SpriteBatch.new
     @font        = BitmapFont.new
+    @preferences = PreferencesManager.new(Settings::PREFERENCES)
+    @sound       = SoundManager.new(self)
+    @music       = MusicManager.new(self)
 
-    #@assets.setLoader(TiledMap, TmxMapLoader.new(InternalFileHandleResolver.new))
+    @preferences.music_muted  = false
+    @preferences.sound_muted  = false
+    @preferences.music_volume = Settings::MUSIC_VOLUME
+    @preferences.sound_volume = Settings::SOUND_VOLUME
+
+    @assets.setLoader(TiledMap.java_class, TmxMapLoader.new(InternalFileHandleResolver.new))
     Texture.setAssetManager(@assets)
 
     Gdx.input.setCatchBackKey(true)
@@ -32,12 +33,11 @@ class JrHeroGame < Game
   end
 
   def preload
-    #@assets.load R::Sound::Menu::ENTER_CLICK, Sound
-    #@assets.load R::Sound::Menu::ENTER_HIT,   Sound
-    #@assets.load R::Sound::Menu::EXIT,        Sound
-
-    #@assets.load R::Skin::UI,                 Skin
-    #@assets.load R::Font::Consolas,           BitmapFont
+    @assets.load R::Sound::Menu::ENTER_CLICK, Sound.java_class
+    @assets.load R::Sound::Menu::ENTER_HIT,   Sound.java_class
+    @assets.load R::Sound::Menu::EXIT,        Sound.java_class
+    @assets.load R::Music::LEVEL,             Music.java_class
+    #@assets.load R::Font::CONSOLAS,           BitmapFont.java_class
   end
 
   def render
@@ -53,6 +53,8 @@ class JrHeroGame < Game
       @batch.begin
       @screen.render(delta)
       @batch.end
+    else
+      @assets.update
     end
   end
 

@@ -11,10 +11,22 @@ class GameScreen < InputAdapter
     draw(delta)
   end
 
-  def show;   end
-  def hide;   end
-  def pause;  end
-  def resume; end
+  def show
+    log 'showing screen %s' % to_s
+  end
+
+  def hide
+    log 'hiding screen %s' % to_s
+  end
+
+  def pause
+    log 'pausing screen %s' % to_s
+  end
+
+  def resume
+    log 'resuming screen %s' % to_s
+  end
+
   def load;   end
   def unload; end
 
@@ -30,6 +42,10 @@ class GameScreen < InputAdapter
 
   def dispose
     unload
+  end
+
+  def to_s
+    self.class.name
   end
 
   protected

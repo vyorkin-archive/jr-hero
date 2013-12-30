@@ -8,6 +8,7 @@ module R
   end
 
   module Music
+    LEVEL = RELATIVE_ROOT + 'assets/music/level.mp3'
   end
 
   module Font
