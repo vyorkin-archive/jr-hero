@@ -1,26 +1,24 @@
-java_import com.badlogic.gdx.Gdx
-java_import com.badlogic.gdx.graphics.Camera
-java_import com.badlogic.gdx.scenes.scene2d.Stage
+require 'game_screen'
 
 class StageScreen < GameScreen
   def initialize(game)
-    super
     @stage = Stage.new(Settings::WIDTH, Settings::HEIGHT, true)
+    super(game)
   end
 
-  def camera
+  def getCamera
     @stage.camera
   end
 
   def show
-    super
     @stage.setViewport(Settings::WIDTH, Settings::HEIGHT, true)
     Gdx.input.setInputProcessor(@stage)
+    super()
   end
 
   def dispose
     @stage.dispose
-    super
+    super()
   end
 
   protected

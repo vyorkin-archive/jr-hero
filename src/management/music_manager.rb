@@ -1,3 +1,5 @@
+require 'audio_manager'
+
 class MusicManager < AudioManager
   def initialize(game)
     @current = nil

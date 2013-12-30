@@ -1,6 +1,17 @@
+require 'locale_manager'
+require 'entity_manager'
+require 'preferences_manager'
+require 'sound_manager'
+require 'music_manager'
+
+require 'loading_screen'
+require 'menu_screen'
+require 'level_screen'
+
 class JrHeroGame < Game
   attr_reader :preferences, :locales, :sound,
-              :music, :assets, :batch, :font
+              :music, :assets, :batch, :font,
+              :entities
 
   def initialize
     @running = true
@@ -47,9 +58,9 @@ class JrHeroGame < Game
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
     if @assets.queuedAssets == 0
-      setScreen(@screen) if getScreen.nil?
+      setScreen(@screen) if screen.nil?
 
-      @batch.setProjectionMatrix(@screen.getCamera().combined)
+      @batch.setProjectionMatrix(@screen.camera.combined)
       @batch.begin
       @screen.render(delta)
       @batch.end
@@ -75,4 +86,7 @@ class JrHeroGame < Game
     super
     [music, font, batch, assets].map(&:dispose)
   end
+
+  alias_method :screen,  :getScreen
+  alias_method :screen=, :setScreen
 end

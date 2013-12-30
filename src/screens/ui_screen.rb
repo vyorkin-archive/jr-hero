@@ -1,23 +1,19 @@
-java_import com.badlogic.gdx.scenes.scene2d.ui.Skin
-java_import com.badlogic.gdx.scenes.scene2d.ui.Table
+require 'stage_screen'
 
 class UIScreen < StageScreen
   def show
-    super
-
-    @skin = @game.assets.get(Settings::SKIN_PATH, Skin.class)
+    @skin = @game.assets.get(Settings::SKIN_PATH, Skin.java_class)
     @table = create_table
     @stage.addActor(@table)
+
+    super()
   end
 
   protected
 
-  def update(delta)
-  end
-
   def draw(delta)
-    super
     Table.drawDebug(@stage) if @game.preferences.developer?
+    super
   end
 
   private

@@ -22,12 +22,20 @@ java_import com.badlogic.gdx.graphics.g2d.BitmapFont
 java_import com.badlogic.gdx.graphics.g2d.SpriteBatch
 java_import com.badlogic.gdx.graphics.g2d.TextureRegion
 
+java_import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+
+# TODO: Doesn't work. How to import this?
+#       Maybe the last nightlies is somehow different? Check this out!
+#java_import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+
 java_import com.badlogic.gdx.audio.Music
 java_import com.badlogic.gdx.audio.Sound
 
 java_import com.badlogic.gdx.math.Vector2
 java_import com.badlogic.gdx.math.Vector3
 java_import com.badlogic.gdx.math.Rectangle
+java_import com.badlogic.gdx.math.Circle
+
 java_import com.badlogic.gdx.utils.Scaling
 
 java_import com.badlogic.gdx.scenes.scene2d.Actor
@@ -37,6 +45,9 @@ java_import com.badlogic.gdx.scenes.scene2d.Stage
 java_import com.badlogic.gdx.scenes.scene2d.actions.Actions
 java_import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 java_import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
+
+java_import com.badlogic.gdx.scenes.scene2d.ui.Skin
+java_import com.badlogic.gdx.scenes.scene2d.ui.Table
 
 java_import com.badlogic.gdx.maps.tiled.TiledMap
 java_import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -54,14 +65,17 @@ SRC_DIR = File.expand_path(File.join(File.dirname(__FILE__), 'src'))
 
 $LOAD_PATH << SRC_DIR
 %w{ camera common components entities management screens systems }.each do |dir|
-  path = File.expand_path(dir, SRC_DIR)
-  $LOAD_PATH << path
-  Dir.glob(File.expand_path("*.rb", path)) { |file| require file }
+  $LOAD_PATH << File.expand_path(dir, SRC_DIR)
 end
 
 require 'active_support/core_ext/object'
 require 'active_support/inflector'
+require 'active_support/core_ext/string/inflections'
 
-%w{ settings resources }.each { |file| require file }
-
-require 'jr_hero_game'
+%w{
+  settings resources system utils component entity 
+  lru_cache game_camera jr_hero_game
+}.each do |file|
+  puts "requiring %s" % file
+  require file
+end

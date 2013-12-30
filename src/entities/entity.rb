@@ -11,10 +11,16 @@ class Entity
 
   def add(*components)
     components.each { |c| @manager.components_of(self, c.class).push(c) }
+    self
+  end
+
+  def <<(component)
+    add(component)
   end
 
   def remove(*components)
     components.each { |c| @manager.components_of(self, c.class).delete(c) }
+    self
   end
 
   def components
@@ -35,5 +41,21 @@ class Entity
 
   def destroy
     @manager.destroy(self)
+  end
+
+  def method_missing(name, *args, &block)
+    source = name.to_s
+    target = source.classify.constantize
+
+    define_singleton_method(name) do |*args|
+      result = components_of(target, *args)
+      source.end_with?('s') ? result : result.first
+    end
+
+    self.send(name)
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    true
   end
 end

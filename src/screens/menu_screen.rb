@@ -1,23 +1,19 @@
-java_import com.badlogic.gdx.Screen
+require 'ui_screen'
 
-require 'level_screen'
-
-class MenuScreen
-  include Screen
-
+class MenuScreen < UIScreen
   def initialize(game)
     @game = game
   end
 
   def show
-
+    super()
   end
 
   def hide
-
+    super()
   end
 
-  def render
-
+  def draw(delta)
+    super(delta)
   end
 end

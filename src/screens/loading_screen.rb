@@ -1,2 +1,4 @@
-class LoadingScreen
+require 'game_screen'
+
+class LoadingScreen < GameScreen
 end

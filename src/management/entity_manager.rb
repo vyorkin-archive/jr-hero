@@ -1,5 +1,8 @@
 #   :component class => {
-#     :entity => [component_id1, ..., component_idn]
+#     :entity => {
+#       :markers => [marker_1, ..., marker_n],
+#       :components => [component_id_1, ..., component_id_n]
+#     }
 #   }
 
 require 'active_support/core_ext/object'
@@ -24,10 +27,15 @@ class EntityManager
     end
   end
 
-  def create(tag = nil)
-    entity = Entity.new(generate_id, self)
-    @tags_to_entities[tag] << entity
-    @entities_to_tags[entity] << tag || UNTAGGED
+  def create(options = {})
+    klass = options[:class] || Entity
+    tag   = create_tag(klass, options[:tag])
+
+    entity = klass.new(generate_id, self)
+
+    @tags_to_entities[tag]    << entity
+    @entities_to_tags[entity] << tag
+
     entity
   end
 
@@ -62,7 +70,15 @@ class EntityManager
     @component_map[klass][entity]
   end
 
-  def entities_with_component_of(klass)
-    @component_map[klass].keys
+  def with_component_of(*classes)
+    classes.inject(all) do |entities, klass|
+      entities = entities & @component_map[klass].keys
+    end
+  end
+
+  private
+
+  def create_tag(klass, tag)
+    tag || (klass == Entity ? UNTAGGED : klass.to_s.downcase)
   end
 end

@@ -48,6 +48,10 @@ class GameScreen < InputAdapter
     self.class.name
   end
 
+  def camera
+    raise RuntimeError, 'screen should provide some camera'
+  end
+
   protected
 
   def update(delta); end

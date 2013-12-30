@@ -1,3 +1,5 @@
+require 'audio_manager'
+
 class SoundManager < AudioManager
   def play(file_name)
     return if muted?
