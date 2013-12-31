@@ -13,7 +13,8 @@ require 'rendering_system'
 
 class LevelScreen < GameScreen
   def initialize(game)
-    @camera = GameCamera.new
+    @camera = OrthographicCamera.new(Settings::WIDTH, Settings::HEIGHT)
+    @viewport = Rectangle.new(0, 0, Settings::WIDTH, Settings::HEIGHT)
 
     @behavior_systems  = [InputSystem.new(game)]
     @rendering_systems = [RenderingSystem.new(game)]
@@ -23,8 +24,13 @@ class LevelScreen < GameScreen
 
   def show
     Gdx.input.setInputProcessor(self)
+    @camera.position.set(Settings::WIDTH / 2, Settings::HEIGHT / 2, 0)
     start
     super()
+  end
+
+  def resize(width, height)
+    super(width, height)
   end
 
   def start
@@ -33,6 +39,8 @@ class LevelScreen < GameScreen
   end
 
   def draw(delta)
+    @camera.update
+    @camera.apply(Gdx.gl10)
     @rendering_systems.each { |s| s.tick(delta) }
   end
 

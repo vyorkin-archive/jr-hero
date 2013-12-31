@@ -8,20 +8,21 @@ class RenderingSystem < System
 
   def tick(delta)
     @shape_renderer.setProjectionMatrix(screen.camera.combined)
-
-    @game.entities
-      .with_component_of(Renderable, SpatialState)
-      .each { |entity| render_entity(entity) }
+    entities = @game.entities.with_component_of(Renderable, SpatialState)
+    render(entities)
   end
 
   private
 
-  def render_entity(entity)
-    location = entity.spatial_state
-
-    @shape_renderer.begin(ShapeRenderer::ShapeType::Filled)
+  def render(entities)
+    @shape_renderer.begin(ShapeRenderer::ShapeType::Line)
     @shape_renderer.setColor(1, 1, 1, 1)
-    @shape_renderer.circle(location.x, location.y, 10, 5)
+
+    entities.each do |entity|
+      location = entity.spatial_state
+      @shape_renderer.circle(location.x, location.y, 20, 3)
+    end
+
     @shape_renderer.end
   end
 end

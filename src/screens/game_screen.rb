@@ -19,6 +19,10 @@ class GameScreen < InputAdapter
     log 'hiding screen %s' % to_s
   end
 
+  def resize(width, height)
+    log 'resizing screen to %dx%d' % [width, height]
+  end
+
   def pause
     log 'pausing screen %s' % to_s
   end
@@ -30,7 +34,6 @@ class GameScreen < InputAdapter
   def load;   end
   def unload; end
 
-  def resize(width, height); end
 
   def done?
     @done
