@@ -76,6 +76,18 @@ class EntityManager
     end
   end
 
+  def method_missing(name, *args, &block)
+    source = name.to_s
+    component_class = source.gsub('with_', '').classify.constantize
+    define_singleton_method(name) { with_component_of(component_class) }
+    self.send(name)
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    source = name.to_s
+    source.start_with?('with_')
+  end
+
   private
 
   def create_tag(klass, tag)

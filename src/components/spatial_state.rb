@@ -1,14 +1,14 @@
 class SpatialState < Component
   class << self
-    def centered(dx = 0, dy = 0)
-      new(0, 0, dx, dy).center!
+    def centered(velocity = 0.0)
+      new(0, 0, velocity).center!
     end
   end
 
-  attr_accessor :x, :y, :dx, :dy
+  attr_accessor :x, :y, :velocity
 
-  def initialize(x = 0, y = 0, dx = 0, dy = 0)
-    @x, @y, @dx, @dy = x, y, dx, dy
+  def initialize(x = 0, y = 0, velocity = 0.0)
+    @x, @y, @velocity = x, y, velocity
     super()
   end
 
@@ -18,8 +18,13 @@ class SpatialState < Component
     self
   end
 
-  def stop!
-    @dx, @dy = 0, 0
+  def move(rotation)
+    @x += @velocity * Math.sin(rotation * Math::PI / 180.0)
+    @y += @velocity * Math.cos(rotation * Math::PI / 180.0)
+  end
+
+  def stop
+    @velocity = 0.0
     self
   end
 end

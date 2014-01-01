@@ -64,17 +64,21 @@ RELATIVE_ROOT = $0['<'] ? 'jr-hero/' : ''
 SRC_DIR = File.expand_path(File.join(File.dirname(__FILE__), 'src'))
 
 $LOAD_PATH << SRC_DIR
-%w{ camera common components entities management screens systems }.each do |dir|
+%w{
+  camera common components entities
+  management screens systems renderers
+}.each do |dir|
   $LOAD_PATH << File.expand_path(dir, SRC_DIR)
 end
 
+require 'state_machine'
 require 'active_support/core_ext/object'
 require 'active_support/inflector'
 require 'active_support/core_ext/string/inflections'
 
 %w{
   settings resources system utils component entity
-  lru_cache game_camera jr_hero_game
+  entity_manager renderer lru_cache game_camera jr_hero_game
 }.each do |file|
   puts "requiring %s" % file
   require file

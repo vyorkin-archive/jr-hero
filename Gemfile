@@ -11,6 +11,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'state_machine'
   gem 'pre-commit'
   gem 'rubycop'
 end

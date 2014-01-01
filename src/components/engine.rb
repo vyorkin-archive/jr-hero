@@ -1,25 +1,24 @@
 class Engine < Component
   attr_accessor :thrust
 
-  def initialize(thrust = 10000)
-    @on = false
+  state_machine :state, :initial => :idling do
+    event :on do
+      transition :idling => :active
+    end
+
+    event :off do
+      transition :active => :idling
+    end
+
+    state :idling do
+    end
+
+    state :active do
+    end
+  end
+
+  def initialize(thrust = 1)
     @thrust = thrust
     super()
-  end
-
-  def on!
-    @on = true
-  end
-
-  def on?
-    @on
-  end
-
-  def off?
-    !@on
-  end
-
-  def off!
-    @on = false
   end
 end

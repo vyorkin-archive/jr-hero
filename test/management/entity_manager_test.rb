@@ -1,6 +1,4 @@
 require 'minitest/unit'
-require 'management/entity_manager'
-require 'components/component'
 
 class EntityManagerTest < MiniTest::Unit::TestCase
   class Spaceship < Entity
@@ -84,5 +82,12 @@ class EntityManagerTest < MiniTest::Unit::TestCase
     entity << MachineGun.new
 
     assert_equal [entity], @manager.with_component_of(LaserGun, MachineGun)
+  end
+
+  def test_dynamic_proxy
+    entity = @manager.create(:class => Spaceship)
+    entity << Component.new
+
+    assert_equal [entity], @manager.with_component
   end
 end

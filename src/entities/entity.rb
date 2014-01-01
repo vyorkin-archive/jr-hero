@@ -50,9 +50,9 @@ class Entity
     if source.end_with?('?')
       define_singleton_method(name) { has_component_of?(target) }
     else
-      define_singleton_method(name) do |*args|
-        array = components_of(target, *args)
-        Entity.plural_word?(source) ? array : array.first
+      define_singleton_method(name) do
+        array = components_of(target)
+        plural_word?(source) ? array : array.first
       end
     end
 
@@ -65,7 +65,7 @@ class Entity
 
   private
 
-  def self.plural_word?(word)
+  def plural_word?(word)
     word.pluralize == word
   end
 end

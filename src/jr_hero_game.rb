@@ -50,7 +50,6 @@ class JrHeroGame < Game
     @assets.load R::Sound::Menu::ENTER_HIT,   Sound.java_class
     @assets.load R::Sound::Menu::EXIT,        Sound.java_class
     @assets.load R::Music::LEVEL,             Music.java_class
-    #@assets.load R::Font::CONSOLAS,           BitmapFont.java_class
   end
 
   def render

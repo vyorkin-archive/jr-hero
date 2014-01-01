@@ -48,6 +48,7 @@ GEM
     slop (3.4.7)
     spoon (0.0.4)
       ffi
+    state_machine (1.2.0)
     user-choices (1.1.6.1)
       builder (>= 2.1.2)
       s4t-utils (>= 1.0.3)
@@ -67,3 +68,4 @@ DEPENDENCIES
   rawr
   ruby-debug
   rubycop
+  state_machine
