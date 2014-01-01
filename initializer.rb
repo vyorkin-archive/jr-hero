@@ -73,7 +73,7 @@ require 'active_support/inflector'
 require 'active_support/core_ext/string/inflections'
 
 %w{
-  settings resources system utils component entity 
+  settings resources system utils component entity
   lru_cache game_camera jr_hero_game
 }.each do |file|
   puts "requiring %s" % file

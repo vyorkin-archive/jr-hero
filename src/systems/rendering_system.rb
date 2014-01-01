@@ -1,5 +1,3 @@
-require 'pry'
-
 class RenderingSystem < System
   def initialize(game)
     @shape_renderer = ShapeRenderer.new

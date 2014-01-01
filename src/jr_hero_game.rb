@@ -32,7 +32,9 @@ class JrHeroGame < Game
     @preferences.music_volume = Settings::MUSIC_VOLUME
     @preferences.sound_volume = Settings::SOUND_VOLUME
 
-    @assets.setLoader(TiledMap.java_class, TmxMapLoader.new(InternalFileHandleResolver.new))
+    map_loader = TmxMapLoader.new(InternalFileHandleResolver.new)
+
+    @assets.setLoader(TiledMap.java_class, map_loader)
     Texture.setAssetManager(@assets)
 
     Gdx.input.setCatchBackKey(true)

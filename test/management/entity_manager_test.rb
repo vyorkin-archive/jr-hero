@@ -1,7 +1,6 @@
 require 'minitest/unit'
 require 'management/entity_manager'
 require 'components/component'
-require 'pry'
 
 class EntityManagerTest < MiniTest::Unit::TestCase
   class Spaceship < Entity
@@ -83,8 +82,6 @@ class EntityManagerTest < MiniTest::Unit::TestCase
     entity = @manager.create(:class => Spaceship)
     entity << LaserGun.new 
     entity << MachineGun.new
-
-    binding.pry
 
     assert_equal [entity], @manager.with_component_of(LaserGun, MachineGun)
   end

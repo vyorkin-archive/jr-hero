@@ -9,6 +9,8 @@ require 'engine'
 require 'fuel'
 
 require 'input_system'
+require 'engine_system'
+require 'bullet_system'
 require 'rendering_system'
 
 class LevelScreen < GameScreen
@@ -16,7 +18,12 @@ class LevelScreen < GameScreen
     @camera = OrthographicCamera.new(Settings::WIDTH, Settings::HEIGHT)
     @viewport = Rectangle.new(0, 0, Settings::WIDTH, Settings::HEIGHT)
 
-    @behavior_systems  = [InputSystem.new(game)]
+    @behavior_systems  = [
+      InputSystem.new(game),
+      EngineSystem.new(game),
+      BulletSystem.new(game)
+    ]
+
     @rendering_systems = [RenderingSystem.new(game)]
 
     super(game)

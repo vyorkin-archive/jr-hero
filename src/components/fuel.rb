@@ -9,4 +9,8 @@ class Fuel < Component
     @remaining -= qty
     @remaining = 0 if @remaining < 0
   end
+
+  def empty?
+    @remaining == 0
+  end
 end

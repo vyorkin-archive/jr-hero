@@ -45,11 +45,15 @@ class Entity
 
   def method_missing(name, *args, &block)
     source = name.to_s
-    target = source.classify.constantize
+    target = source.gsub('?', '').classify.constantize
 
-    define_singleton_method(name) do |*args|
-      result = components_of(target, *args)
-      source.end_with?('s') ? result : result.first
+    if source.end_with?('?')
+      define_singleton_method(name) { has_component_of?(target) }
+    else
+      define_singleton_method(name) do |*args|
+        array = components_of(target, *args)
+        Entity.plural_word?(source) ? array : array.first
+      end
     end
 
     self.send(name)
@@ -57,5 +61,11 @@ class Entity
 
   def respond_to_missing?(name, include_private = false)
     true
+  end
+
+  private
+
+  def self.plural_word?(word)
+    word.pluralize == word
   end
 end
