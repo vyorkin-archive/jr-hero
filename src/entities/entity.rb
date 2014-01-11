@@ -9,8 +9,16 @@ class Entity
     @manager.tags(self)
   end
 
-  def add(*components)
-    components.each { |c| @manager.components_of(self, c.class).push(c) }
+  def add_tag(tag)
+    @manager.add_tag(self, tag)
+  end
+
+  def remove_tag(tag)
+    @amanger.remove_tag(self, tag)
+  end
+
+  def add(*items)
+    items.each { |item| @manager.components_of(self, item.class).push(item) }
     self
   end
 
@@ -18,8 +26,8 @@ class Entity
     add(component)
   end
 
-  def remove(*components)
-    components.each { |c| @manager.components_of(self, c.class).delete(c) }
+  def remove(*items)
+    items.each { |item| @manager.components_of(self, item.class).delete(item) }
     self
   end
 
@@ -43,6 +51,10 @@ class Entity
     @manager.destroy(self)
   end
 
+  def ==(other)
+    self.id == other.id
+  end
+
   def method_missing(name, *args, &block)
     source = name.to_s
     target = source.gsub('?', '').classify.constantize
@@ -60,7 +72,7 @@ class Entity
   end
 
   def respond_to_missing?(name, include_private = false)
-    true
+    name.to_s.end_with('?')
   end
 
   private

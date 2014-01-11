@@ -23,12 +23,10 @@ class CollisionSystem < System
         if overlaps?(entity.collidable, bullet.collidable)
           if entity.breakable?
             breakable = entity.breakable
-
             breakable.hit(bullet.damage)
             @game.sound.play(R::Sound::Hit::PLAYER)
-
             if breakable.dead?
-              entities_to_destroy << entity
+              entities_to_destroy << entity 
               @game.sound.play(R::Sound::Explosion::SHORT)
             end
           else

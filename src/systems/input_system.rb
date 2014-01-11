@@ -6,20 +6,19 @@ class InputSystem < System
   FIRE        = Input::Keys::F
 
   def tick(delta)
-    entities.with_input_responsive.each do |entity|
-      entity.engine.on! if handle_for?(entity, THRUST) && entity.engine?
+    @game.entities.with_input_responsive.each do |entity|
+      entity.cannon.fire  if entity.cannon? && handle_for?(entity, FIRE)
 
-      if entity.renderable?
-        renderable = entity.renderable
-
-        renderable.rotate(1.5)  if handle_for?(entity, TURN_LEFT)
-        renderable.rotate(-1.5) if handle_for?(entity, TURN_RIGHT)
+      if entity.engine?
+        entity.engine.on    if handle_for?(entity, THRUST)
+        entity.engine.break if handle_for?(entity, BREAK)
       end
 
-      if entity.cannon? && handle_for?(entity, FIRE)
-        entity.cannon.ammo -= 1
-        @game.sound.play(R::Sound::Hit::ENEMY)
+      if entity.wheel?
+        entity.wheel.turn( 1) if handle_for?(entity, TURN_LEFT)
+        entity.wheel.turn(-1) if handle_for?(entity, TURN_RIGHT)
       end
+
     end
   end
 

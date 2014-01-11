@@ -6,5 +6,9 @@ class EntityTest < MiniTest::Unit::TestCase
   end
 
   def test_entity_dynamic_proxy
+    entity = @manager.create
+    entity << Component.new
+
+    assert entity.component?
   end
 end

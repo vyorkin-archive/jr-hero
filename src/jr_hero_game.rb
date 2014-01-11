@@ -7,6 +7,7 @@ require 'music_manager'
 require 'loading_screen'
 require 'menu_screen'
 require 'level_screen'
+require 'demo_screen'
 
 class JrHeroGame < Game
   attr_reader :preferences, :locales, :sound,
@@ -27,13 +28,15 @@ class JrHeroGame < Game
     @sound       = SoundManager.new(self)
     @music       = MusicManager.new(self)
 
-    @preferences.music_muted  = false
+    @preferences.music_muted  = true
     @preferences.sound_muted  = false
     @preferences.music_volume = Settings::MUSIC_VOLUME
     @preferences.sound_volume = Settings::SOUND_VOLUME
+    @preferences.developer = Settings::DEVELOPER
 
     map_loader = TmxMapLoader.new(InternalFileHandleResolver.new)
 
+    @batch.disableBlending
     @assets.setLoader(TiledMap.java_class, map_loader)
     Texture.setAssetManager(@assets)
 
@@ -50,6 +53,7 @@ class JrHeroGame < Game
     @assets.load R::Sound::Menu::ENTER_HIT,   Sound.java_class
     @assets.load R::Sound::Menu::EXIT,        Sound.java_class
     @assets.load R::Music::LEVEL,             Music.java_class
+    @assets.load R::Atlas::SHOOTER,           TextureAtlas.java_class
   end
 
   def render
@@ -80,7 +84,7 @@ class JrHeroGame < Game
   end
 
   def log(message, *args)
-    Gdx.app.log(Settings::LOG, message % args)
+    Gdx.app.log(Settings::LOG, message % args) if @preferences.developer?
   end
 
   def dispose

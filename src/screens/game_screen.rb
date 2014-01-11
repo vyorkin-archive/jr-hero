@@ -34,7 +34,6 @@ class GameScreen < InputAdapter
   def load;   end
   def unload; end
 
-
   def done?
     @done
   end

@@ -1,30 +1,31 @@
 class SpatialState < Component
-  class << self
-    def centered(velocity = 0.0)
-      new(0, 0, velocity).center!
-    end
-  end
+  attr_accessor :position, :velocity, :facing
 
-  attr_accessor :x, :y, :velocity
-
-  def initialize(x = 0, y = 0, velocity = 0.0)
-    @x, @y, @velocity = x, y, velocity
+  def initialize(position, facing, velocity = Vector2.new)
+    @position, @facing, @velocity = position, facing, velocity
     super()
   end
 
-  def center!
-    @x = Gdx.graphics.getWidth / 2.0
-    @y = Gdx.graphics.getHeight / 2.0
+  def stop
+    @velocity = Vector2.new
     self
   end
 
-  def move(rotation)
-    @x += @velocity * Math.sin(rotation * Math::PI / 180.0)
-    @y += @velocity * Math.cos(rotation * Math::PI / 180.0)
+  def turn(angle)
+    @facing.rotate(angle).nor
+    self
   end
 
-  def stop
-    @velocity = 0.0
+  def thrust(acceleration)
+    @velocity.add(
+      @facing.x * acceleration,
+      @facing.y * acceleration
+    )
+    self
+  end
+
+  def move
+    @position.add(@velocity)
     self
   end
 end

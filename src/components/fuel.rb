@@ -3,6 +3,7 @@ class Fuel < Component
 
   def initialize(remaining)
     @remaining = remaining
+    super()
   end
 
   def burn(qty)

@@ -1,6 +1,5 @@
 #   :component class => {
 #     :entity => {
-#       :markers => [marker_1, ..., marker_n],
 #       :components => [component_id_1, ..., component_id_n]
 #     }
 #   }
@@ -21,10 +20,7 @@ class EntityManager
 
     @entities_to_tags = Hash.new { |h, k| h[k] = [] }
     @tags_to_entities = Hash.new { |h, k| h[k] = [] }
-
-    @component_map = Hash.new do |hash, key|
-      hash[key] = Hash.new { |h, k| h[k] = [] }
-    end
+    @component_map    = Hash.new { |h, k| h[k] = {} }
   end
 
   def create(options = {})
@@ -32,9 +28,7 @@ class EntityManager
     tag   = create_tag(klass, options[:tag])
 
     entity = klass.new(generate_id, self)
-
-    @tags_to_entities[tag]    << entity
-    @entities_to_tags[entity] << tag
+    add_tag(entity, tag)
 
     entity
   end
@@ -50,6 +44,16 @@ class EntityManager
     @entities_to_tags[entity]
   end
 
+  def add_tag(entity, tag)
+    @tags_to_entities[tag]    << entity
+    @entities_to_tags[entity] << tag
+  end
+
+  def remove_tag(entity, tag)
+    @tags_to_entities[tag].delete(entity)
+    @entities_to_tags[entity].delete(tag)
+  end
+
   def all
     @entities_to_tags.keys
   end
@@ -60,14 +64,21 @@ class EntityManager
       .values.flatten
   end
 
+  def of(*classes)
+    tagged(*classes.map { |klass| klass.to_s.downcase.to_sym })
+  end
+
   def components(entity)
-    @component_map.values
-      .select { |h| h.key? entity }
-      .map(&:values).flatten
+    result = []
+    @component_map.values.each do |hash|
+      result += hash[entity] if hash[entity]
+    end
+    result
   end
 
   def components_of(entity, klass)
-    @component_map[klass][entity]
+    @component_map[klass] ||= {}
+    @component_map[klass][entity] ||= []
   end
 
   def with_component_of(*classes)
@@ -84,13 +95,30 @@ class EntityManager
   end
 
   def respond_to_missing?(name, include_private = false)
-    source = name.to_s
-    source.start_with?('with_')
+    name.to_s.start_with?('with_')
+  end
+
+  def dump
+    output = to_s
+
+    all.each do |e|
+      output << "\n #{e} (#{@entities_to_tags[e]})"
+      comps = components(e)
+      comps.each do |c|
+        output << "\n   #{c.to_s}"
+      end
+    end
+
+    output
+  end
+
+  def to_s
+    "EntityManager {#{id}: #{all.size} managed entities}"
   end
 
   private
 
   def create_tag(klass, tag)
-    tag || (klass == Entity ? UNTAGGED : klass.to_s.downcase)
+    (tag || (klass == Entity ? UNTAGGED : klass.to_s.downcase)).to_sym
   end
 end

@@ -1,11 +1,11 @@
 module Settings
-  WIDTH             = 800
-  HEIGHT            = 600
+  WIDTH             = 640
+  HEIGHT            = 480
   TITLE             = 'JR Hero'
   VERSION           = '0.0.1 pre-alpha'
   LOG               = 'jr-hero'
   PREFERENCES       = TITLE.downcase.gsub(' ', '-')
-  DEVELOPER         = true
+  DEVELOPER         = false
   CURSOR_FILE_NAME  = nil
   GL20              = false
   ACCELEROMETER     = true
@@ -17,5 +17,5 @@ module Settings
   RESIZABLE         = true
   FORCE_EXIT        = true
   MUSIC_VOLUME      = 0.5
-  SOUND_VOLUME      = 0.5
+  SOUND_VOLUME      = 1.0
 end

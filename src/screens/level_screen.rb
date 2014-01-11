@@ -1,40 +1,40 @@
 require 'game_screen'
 
-require 'player'
-
 require 'input_responsive'
 require 'spatial_state'
+require 'lifetime'
 require 'renderable'
 require 'collidable'
+require 'breakable'
+require 'wheel'
 require 'engine'
 require 'fuel'
 require 'cannon'
+require 'bullet'
+require 'particle'
+require 'enemy_ai'
 
 require 'input_system'
+require 'collision_system'
+require 'enemy_ai_system'
+require 'wheel_system'
 require 'engine_system'
+require 'cannon_system'
 require 'bullet_system'
 require 'rendering_system'
+require 'particle_system'
 
-require 'debug_renderer'
-require 'hud_renderer'
+require 'component_factory'
+require 'entity_factory'
 
 class LevelScreen < GameScreen
+  include ScreenHelper
+
+  attr_reader :camera
+
   def initialize(game)
     @camera = OrthographicCamera.new(Settings::WIDTH, Settings::HEIGHT)
     @viewport = Rectangle.new(0, 0, Settings::WIDTH, Settings::HEIGHT)
-
-    @renderers = [
-      DebugRenderer.new(game),
-      HUDRenderer.new(game)
-    ]
-    @behavior_systems = [
-      InputSystem.new(game),
-      EngineSystem.new(game),
-      BulletSystem.new(game)
-    ]
-    @rendering_systems = [
-      RenderingSystem.new(game)
-    ]
 
     super(game)
   end
@@ -43,7 +43,31 @@ class LevelScreen < GameScreen
     Gdx.input.setInputProcessor(self)
     @camera.setToOrtho(false, Settings::WIDTH, Settings::HEIGHT)
 
+    @atlas = @game.assets.get(R::Atlas::SHOOTER, TextureAtlas.java_class)
+
+    @component_factory = ComponentFactory.new(@atlas)
+    @entity_factory = EntityFactory.new(@game.entities, @component_factory, @atlas)
+
+    @rendering_system = RenderingSystem.new(@game)
+    @particle_system = ParticleSystem.new(@game)
+    @bullet_system = BulletSystem.new(@game)
+
+    @updatable_systems = [
+      CollisionSystem.new(@game),
+      InputSystem.new(@game),
+      WheelSystem.new(@game),
+      EngineSystem.new(@game),
+      CannonSystem.new(@game, @entity_factory),
+      EnemyAISystem.new(@game),
+      @bullet_system, @particle_system
+    ]
+
     start
+    super()
+  end
+
+  def hide
+    @atlas.dispose
     super()
   end
 
@@ -52,7 +76,32 @@ class LevelScreen < GameScreen
   end
 
   def start
-    create_player
+    @entity_factory.create_player_ship
+
+    enemies = [
+      R::Sprite::Enemy::TRANSFORMER,
+      R::Sprite::Enemy::RAPTOR,
+      R::Sprite::Enemy::RING,
+      R::Sprite::Enemy::BUG,
+      R::Sprite::Enemy::WORM,
+      R::Sprite::Enemy::ALIEN,
+      R::Sprite::Enemy::SUKHOI
+    ]
+
+    8.times do
+      position = Vector2.new(
+        rand(10..screen_width - 10),
+        rand(10..screen_height - 10)
+      )
+      @entity_factory.create_enemy_ship(
+        enemies[rand(0..enemies.size - 1)],
+        position
+      )
+    end
+
+    puts "entity dump:"
+    puts @game.entities.dump
+
     @game.music.play(R::Music::LEVEL)
   end
 
@@ -60,22 +109,18 @@ class LevelScreen < GameScreen
     @camera.update
     @camera.apply(Gdx.gl10)
 
-    @rendering_systems.each { |s| s.tick(delta) }
-    @renderers.each { |r| r.render(delta) }
+    @rendering_system.tick(delta)
   end
 
   def update(delta)
-    @behavior_systems.each { |s| s.tick(delta) }
-  end
-
-  def camera
-    @camera
+    @updatable_systems.each { |s| s.tick(delta) }
   end
 
   def load
-    @game.assets.load R::Sound::Hit::ENEMY,  Sound.java_class
-    @game.assets.load R::Sound::Hit::PLAYER, Sound.java_class
-    @game.assets.load R::Sound::Hit::SHIELD, Sound.java_class
+    @game.assets.load R::Sound::Hit::ENEMY,   Sound.java_class
+    @game.assets.load R::Sound::Hit::PLAYER,  Sound.java_class
+    @game.assets.load R::Sound::Hit::SHIELD,  Sound.java_class
+    @game.assets.load R::Sound::Shot::SINGLE, Sound.java_class
 
     @game.assets.load R::Sound::Explosion::SHORT, Sound.java_class
     @game.assets.load R::Sound::Explosion::LONG,  Sound.java_class
@@ -90,23 +135,5 @@ class LevelScreen < GameScreen
     @game.assets.unload R::Sound::Explosion::SHORT
     @game.assets.unload R::Sound::Explosion::LONG
     @game.assets.unload R::Sound::Explosion::BIG
-  end
-
-  private
-
-  def create_player
-    @player = @game.entities.create(:class => Player)
-
-    @player << SpatialState.centered
-    @player << Renderable.new
-    @player << Collidable.new
-    @player << Engine.new
-    @player << Fuel.new(25000)
-    @player << Cannon.new(1, 500)
-    @player << InputResponsive.new([
-                 Input::Keys::A, Input::Keys::W,
-                 Input::Keys::D, Input::Keys::S,
-                 Input::Keys::F
-               ])
   end
 end

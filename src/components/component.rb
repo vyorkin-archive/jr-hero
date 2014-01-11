@@ -10,4 +10,8 @@ class Component
   def to_s
     "Component {#{id}: #{self.class.name}}"
   end
+0
+  def delta
+    Gdx.graphics.getDeltaTime
+  end
 end

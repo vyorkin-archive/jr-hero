@@ -1,2 +1,0 @@
-class Player < Entity
-end
