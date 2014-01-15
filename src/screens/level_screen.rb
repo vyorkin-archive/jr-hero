@@ -2,7 +2,7 @@
 class LevelScreen < GameScreen
   include ScreenHelper
 
-  attr_reader :camera
+  attr_reader :camera, :entity_factory
 
   def initialize(game)
     @camera = OrthographicCamera.new(Settings::WIDTH, Settings::HEIGHT)
@@ -50,27 +50,7 @@ class LevelScreen < GameScreen
 
   def start
     @entity_factory.create_player_ship
-
-    enemies = [
-      R::Sprite::Enemy::TRANSFORMER,
-      R::Sprite::Enemy::RAPTOR,
-      R::Sprite::Enemy::RING,
-      R::Sprite::Enemy::BUG,
-      R::Sprite::Enemy::WORM,
-      R::Sprite::Enemy::ALIEN,
-      R::Sprite::Enemy::SUKHOI
-    ]
-
-    2.times do
-      position = Vector2.new(
-        rand(10..screen_width - 10),
-        rand(10..screen_height - 10)
-      )
-      @entity_factory.create_enemy_ship(
-        enemies[rand(0..enemies.size - 1)],
-        position
-      )
-    end
+    @entity_factory.create_random_enemy_ship
 
     puts "entity dump:"
     puts @game.entities.dump

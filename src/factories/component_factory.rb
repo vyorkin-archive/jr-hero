@@ -28,7 +28,7 @@ class ComponentFactory
   end
 
   def slow_engine
-    Engine.new(0.00000001, 2.5)
+    Engine.new(0.0000000001, 2.5)
   end
 
   def wheel
@@ -39,7 +39,7 @@ class ComponentFactory
 
   def circle_bullet
     {
-      :damage => 1.0, :speed => 0.01,
+      :damage => 1.0, :speed => 0.00000001, :range => 0.2,
       :sprite => R::Sprite::Shot::CIRCLE,
       :sound  => R::Sound::Shot::SINGLE
     }
@@ -47,7 +47,7 @@ class ComponentFactory
 
   def single_bullet
     {
-      :damage => 4.0, :speed => 1.0,
+      :damage => 4.0, :speed => 1.0, :range => 0.3,
       :sprite => R::Sprite::Shot::SINGLE,
       :sound  => R::Sound::Shot::SINGLE
     }
@@ -55,7 +55,7 @@ class ComponentFactory
 
   def double_bullet
     {
-      :damage => 8.0, :speed => 1.4,
+      :damage => 8.0, :speed => 1.4, :range => 0.4,
       :sprite => R::Sprite::Shot::DOUBLE,
       :sound  => R::Sound::Shot::SINGLE
     }

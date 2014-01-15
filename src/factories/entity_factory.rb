@@ -1,6 +1,16 @@
 class EntityFactory
   include ScreenHelper
 
+  ENEMY_SPRITES = [
+    R::Sprite::Enemy::TRANSFORMER,
+    R::Sprite::Enemy::RAPTOR,
+    R::Sprite::Enemy::RING,
+    R::Sprite::Enemy::BUG,
+    R::Sprite::Enemy::WORM,
+    R::Sprite::Enemy::ALIEN,
+    R::Sprite::Enemy::SUKHOI
+  ]
+
   def initialize(entities, component_factory, atlas)
     @entities, @component_factory = entities, component_factory
     @atlas = atlas
@@ -28,7 +38,7 @@ class EntityFactory
     bullet.damage = entity.cannon.bullet[:damage]
     bullet.speed  = entity.cannon.bullet[:speed]
 
-    bullet << Lifetime.new(0.10)
+    bullet << Lifetime.new(0.30)
 
     sprite = create_sprite(kind)
     renderable = Renderable.new
@@ -61,6 +71,17 @@ class EntityFactory
                Input::Keys::D, Input::Keys::S,
                Input::Keys::F
              ])
+  end
+
+  def create_random_enemy_ship
+    position = Vector2.new(
+      rand(10..640 - 10),
+      rand(10..480 - 10)
+    )
+    create_enemy_ship(
+      ENEMY_SPRITES[rand(0..ENEMY_SPRITES.size - 1)],
+      position
+    )
   end
 
   def create_enemy_ship(kind, position)

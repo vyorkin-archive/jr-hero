@@ -12,14 +12,16 @@ class EnemyAISystem < System
       to_target = target_position.cpy.sub(enemy.spatial_state.position)
       distance  = enemy.spatial_state.position.dst(target_position)
 
-      facing_target = to_target.dot(facing) > 0
+      facing_target = to_target.dot(to_target) > 0
 
-      if ai.shooting_range > distance && facing_target
-        enemy.engine.on
-      elsif ai.shooting_range < distance
-        enemy.engine.break
-      else
-        enemy.spatial_state.stop
+      if rand(1..10) == 5
+        if ai.shooting_range > distance && facing_target && 
+          enemy.engine.on
+        elsif ai.shooting_range < distance
+          enemy.engine.break
+        else
+          enemy.spatial_state.stop
+        end
       end
 
       clockwise_turn = enemy.spatial_state.facing.crs(to_target) > 0
