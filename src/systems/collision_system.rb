@@ -26,11 +26,6 @@ class CollisionSystem < System
 
             breakable.hit(bullet.damage)
             @game.sound.play(R::Sound::Hit::PLAYER)
-
-            if breakable.dead?
-              entities_to_destroy << entity
-              @game.sound.play(R::Sound::Explosion::SHORT)
-            end
           else
             entities_to_destroy << entity
           end

@@ -13,7 +13,7 @@ module Settings
   WAKE_LOCK         = false
   HIDE_STATUS_BAR   = false
   VSYNC_ENABLED     = true
-  FULLSCREEN        = false
+  FULLSCREEN        = true
   RESIZABLE         = true
   FORCE_EXIT        = true
   MUSIC_VOLUME      = 0.5

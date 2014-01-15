@@ -1,31 +1,3 @@
-require 'game_screen'
-
-require 'input_responsive'
-require 'spatial_state'
-require 'lifetime'
-require 'renderable'
-require 'collidable'
-require 'breakable'
-require 'wheel'
-require 'engine'
-require 'fuel'
-require 'cannon'
-require 'bullet'
-require 'particle'
-require 'enemy_ai'
-
-require 'input_system'
-require 'collision_system'
-require 'enemy_ai_system'
-require 'wheel_system'
-require 'engine_system'
-require 'cannon_system'
-require 'bullet_system'
-require 'rendering_system'
-require 'particle_system'
-
-require 'component_factory'
-require 'entity_factory'
 
 class LevelScreen < GameScreen
   include ScreenHelper
@@ -54,6 +26,7 @@ class LevelScreen < GameScreen
 
     @updatable_systems = [
       CollisionSystem.new(@game),
+      BreakableSystem.new(@game),
       InputSystem.new(@game),
       WheelSystem.new(@game),
       EngineSystem.new(@game),
@@ -88,7 +61,7 @@ class LevelScreen < GameScreen
       R::Sprite::Enemy::SUKHOI
     ]
 
-    8.times do
+    2.times do
       position = Vector2.new(
         rand(10..screen_width - 10),
         rand(10..screen_height - 10)

@@ -4,7 +4,8 @@ require 'hud_renderer'
 class RenderingSystem < System
   def initialize(game)
     @shape_renderer = ShapeRenderer.new
-    @renderers = [DebugRenderer.new(game), HUDRenderer.new(game)]
+    @debug_renderer = DebugRenderer.new(game)
+    @renderers = [HUDRenderer.new(game)]
     super(game)
   end
 
@@ -14,7 +15,8 @@ class RenderingSystem < System
     render_entities(delta)
     render_particles(delta)
 
-    @renderers.each { |r| r.render(delta) }
+    #@renderers.each { |r| r.render(delta) }
+    @debug_renderer.render(delta) if @game.preferences.developer?
   end
 
   private

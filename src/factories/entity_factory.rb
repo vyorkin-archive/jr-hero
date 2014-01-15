@@ -25,10 +25,10 @@ class EntityFactory
     entity_sprite = entity.renderable.sprite
 
     bullet = @entities.create(:class => Bullet)
-    bullet.damage = 4.0
-    bullet.speed = 1.0
+    bullet.damage = entity.cannon.bullet[:damage]
+    bullet.speed  = entity.cannon.bullet[:speed]
 
-    bullet << Lifetime.new(0.48)
+    bullet << Lifetime.new(0.10)
 
     sprite = create_sprite(kind)
     renderable = Renderable.new
@@ -53,21 +53,21 @@ class EntityFactory
   end
 
   def create_player_ship
-    entity = create_ship(R::Sprite::Ship::USP)
+    entity = create_ship(R::Sprite::Ship::GENCORE)
     entity.add_tag(:player)
-    entity << Breakable.new(100.0, 200.0)
+    entity << @component_factory.player_breakable
     entity << InputResponsive.new([
                Input::Keys::A, Input::Keys::W,
                Input::Keys::D, Input::Keys::S,
-               Input::Keys::F, Input::Keys::S
+               Input::Keys::F
              ])
   end
 
   def create_enemy_ship(kind, position)
     entity = create_ship(kind, position)
     entity.add_tag(:enemy)
-    entity << EnemyAi.new(200.0, 300.0)
-    entity << Breakable.new(20.0, 40.0)
+    entity << EnemyAi.new(200.0, 150.0)
+    entity << @component_factory.enemy_breakable
   end
 
   def create_ship(kind, position = screen_center)
@@ -83,10 +83,10 @@ class EntityFactory
     entity << Collidable.new(
       position, Vector2.new(sprite.getWidth, sprite.getHeight)
     )
-    entity << Wheel.new(2.0)
-    entity << Engine.new(0.05, 5.0)
-    entity << Fuel.new(5000)
-    entity << Cannon.new(1000)
+    entity << @component_factory.wheel
+    entity << @component_factory.fast_engine
+    entity << @component_factory.player_cannon
+    entity << @component_factory.fuel
   end
 
   private

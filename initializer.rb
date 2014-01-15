@@ -5,10 +5,6 @@ require 'lib/java/libgdx-nightly-20131204/gdx-backend-lwjgl.jar'
 require 'lib/java/libgdx-nightly-20131204/gdx-natives.jar'
 require 'lib/java/libgdx-nightly-20131204/gdx.jar'
 
-def import_classes(package, classes)
-  classes.each { |clazz| eval("java_import %s.%s" % [package, clazz]) }
-end
-
 {
   'com.badlogic.gdx' => %w(ApplicationListener Game Gdx Screen Input InputAdapter InputMultiplexer),
   'com.badlogic.gdx.assets' => %w(AssetManager),
@@ -25,7 +21,9 @@ end
   'com.badlogic.gdx.maps.tiled.renderers' => %w(OrthogonalTiledMapRenderer),
   'com.badlogic.gdx.assets.loaders.resolvers' => %w(InternalFileHandleResolver),
   'com.badlogic.gdx.backends.lwjgl' => %w(LwjglPreferences LwjglApplication LwjglApplicationConfiguration)
-}.each { |package, klasses| import_classes(package, klasses) }
+}.each do |package, klasses|
+  klasses.each { |klass| eval("java_import %s.%s" % [package, klass]) }
+end
 
 GdxArray = com.badlogic.gdx.utils.Array
 
@@ -49,8 +47,15 @@ require 'active_support/core_ext/string/inflections'
 %w{
   settings resources system utils component entity
   entity_manager renderer lru_cache screen_helper
-  game_camera jr_hero_game
+  game_camera game_screen input_responsive spatial_state lifetime renderable
+  collidable breakable wheel engine fuel cannon bullet particle enemy_ai
+  input_system collision_system breakable_system enemy_ai_system
+  wheel_system engine_system cannon_system bullet_system rendering_system
+  particle_system component_factory entity_factory locale_manager
+  preferences_manager sound_manager music_manager loading_screen
+  menu_screen level_screen demo_screen jr_hero_game
 }.each do |file|
   puts "requiring %s" % file
   require file
 end
+

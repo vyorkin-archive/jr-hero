@@ -1,13 +1,3 @@
-require 'locale_manager'
-require 'entity_manager'
-require 'preferences_manager'
-require 'sound_manager'
-require 'music_manager'
-
-require 'loading_screen'
-require 'menu_screen'
-require 'level_screen'
-require 'demo_screen'
 
 class JrHeroGame < Game
   attr_reader :preferences, :locales, :sound,

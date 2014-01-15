@@ -16,7 +16,7 @@ class EngineSystem < System
           spatial_state.thrust(engine.acceleration)
         end
       elsif engine.breaking?
-        spatial_state.thrust(-engine.acceleration)
+        spatial_state.thrust(-engine.acceleration * 2)
       end
 
       entity.engine.off

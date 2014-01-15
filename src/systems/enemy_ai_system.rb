@@ -1,30 +1,35 @@
-require 'pry'
-
 class EnemyAISystem < System
   def tick(delta)
-    enemies = @game.entities.with_enemy_ai
-    enemies.each do |enemy|
+    @game.entities.with_enemy_ai.each do |enemy|
       ai = enemy.enemy_ai
-
       ai.target ||= random_target
 
+      facing = enemy.spatial_state.facing
+
       target_position = ai.target.spatial_state.position
+      target_facing   = ai.target.spatial_state.facing
 
       to_target = target_position.cpy.sub(enemy.spatial_state.position)
-      distance = Math.sqrt(to_target.dot(to_target))
+      distance  = enemy.spatial_state.position.dst(target_position)
 
-      if ai.running?
-        too_close = ai.run_distance < distance
-      elsif ai.attacking?
-        if ai.shooting_range < distance
-          enemy.engine.on
-        elsif ai.shooting_range > distance
-          enemy.engine.break
-          enemy.cannon.fire
-        else
-          enemy.spatial_state.stop
-        end
+      facing_target = to_target.dot(facing) > 0
+
+      if ai.shooting_range > distance && facing_target
+        enemy.engine.on
+      elsif ai.shooting_range < distance
+        enemy.engine.break
+      else
+        enemy.spatial_state.stop
       end
+
+      clockwise_turn = enemy.spatial_state.facing.crs(to_target) > 0
+      if clockwise_turn
+        enemy.wheel.turn(1)
+      else
+        enemy.wheel.turn(-1)
+      end
+
+      enemy.cannon.fire if facing_target
     end
   end
 
