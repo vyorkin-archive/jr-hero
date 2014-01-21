@@ -18,7 +18,7 @@ class JrHeroGame < Game
     @sound       = SoundManager.new(self)
     @music       = MusicManager.new(self)
 
-    @preferences.music_muted  = true
+    @preferences.music_muted  = false
     @preferences.sound_muted  = false
     @preferences.music_volume = Settings::MUSIC_VOLUME
     @preferences.sound_volume = Settings::SOUND_VOLUME

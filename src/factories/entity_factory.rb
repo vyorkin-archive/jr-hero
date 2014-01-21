@@ -38,7 +38,7 @@ class EntityFactory
     bullet.damage = entity.cannon.bullet[:damage]
     bullet.speed  = entity.cannon.bullet[:speed]
 
-    bullet << Lifetime.new(0.30)
+    bullet << Lifetime.new(entity.cannon.bullet[:range])
 
     sprite = create_sprite(kind)
     renderable = Renderable.new

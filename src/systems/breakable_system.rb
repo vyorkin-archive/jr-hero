@@ -18,6 +18,7 @@ class BreakableSystem < System
         entity.destroy
 
         @entity_factory.create_random_enemy_ship
+        @entity_factory.create_random_enemy_ship
       end
     end
   end

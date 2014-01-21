@@ -14,16 +14,6 @@ class EnemyAISystem < System
 
       facing_target = to_target.dot(to_target) > 0
 
-      if rand(1..10) == 5
-        if ai.shooting_range > distance && facing_target && 
-          enemy.engine.on
-        elsif ai.shooting_range < distance
-          enemy.engine.break
-        else
-          enemy.spatial_state.stop
-        end
-      end
-
       clockwise_turn = enemy.spatial_state.facing.crs(to_target) > 0
       if clockwise_turn
         enemy.wheel.turn(1)
@@ -31,7 +21,14 @@ class EnemyAISystem < System
         enemy.wheel.turn(-1)
       end
 
-      enemy.cannon.fire if facing_target
+      if ai.shooting_range < distance && facing_target
+        enemy.engine.on
+      elsif ai.shooting_range > distance
+        enemy.cannon.fire if facing_target
+      end
+
+      speed = enemy.spatial_state.velocity.len
+      enemy.engine.off if speed >= 1.0
     end
   end
 
